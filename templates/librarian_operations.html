@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Librarian Operations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles3.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .nav-buttons {
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .form-section {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+        }
+
+        .form-section input, .form-section select {
+            display: block;
+            margin-bottom: 12px;
+            padding: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-section input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .flash {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .flash.success { background-color: #d4edda; color: #155724; }
+        .flash.warning { background-color: #fff3cd; color: #856404; }
+        .flash.danger  { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <h2>Librarian Operations Dashboard</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button onclick="toggleSection('AddBook')">Add Book</button>
+        <button onclick="toggleSection('AddCustomer')">Add Customer</button>
+        <button onclick="toggleSection('BorrowBook')">Borrow Book</button>
+        <button onclick="toggleSection('ReturnBook')">Return Book</button>
+        <button onclick="toggleSection('AddFine')">Add Fine</button>
+        <button onclick="toggleSection('PayFine')">Pay Fine</button>
+        <button onclick="toggleSection('SearchCustomer')">Search Customer</button>
+    </div>
+
+    <!-- Add Book Form -->
+    <div id="AddBook" class="form-section">
+        <h3>Add Book</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="add_book">
+            <input type="text" name="title" placeholder="Title" required>
+            <input type="text" name="author" placeholder="Author" required>
+            <input type="text" name="category" placeholder="Category">
+            <input type="text" name="publisher" placeholder="Publisher">
+            <input type="number" name="published_year" placeholder="Published Year">
+            <input type="text" name="section" placeholder="Section">
+            <input type="text" name="shelf" placeholder="Shelf">
+            <input type="number" name="available_copies" placeholder="Available Copies" min="1" value="1">
+            <input type="submit" value="Add Book">
+        </form>
+    </div>
+
+    <!-- Add Customer Form -->
+    <div id="AddCustomer" class="form-section">
+        <h3>Add Customer</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="add_customer">
+            <input type="text" name="name" placeholder="Customer Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="phone" placeholder="Phone" required>
+            <input type="submit" value="Add Customer">
+        </form>
+    </div>
+
+    <!-- Borrow Book Form -->
+    <!-- Borrow Book Form -->
+<div id="BorrowBook" class="form-section">
+    <h3>Borrow Book</h3>
+    <form method="POST" action="/librarian_operations">
+        <input type="hidden" name="action_type" value="borrow_book">
+        <input type="text" name="customer_name" placeholder="Customer Name" required>
+        <input type="text" name="book_title" placeholder="Book Title" required>
+        <input type="date" name="return_date" placeholder="Return Date" required>
+        <input type="submit" value="Borrow Book">
+    </form>
+</div>
+
+
+    <!-- Return Book Form -->
+    <div id="ReturnBook" class="form-section">
+        <h3>Return Book</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="return_book">
+            <input type="text" name="book_title" placeholder="Enter Book Title" required>
+            <input type="text" name="customer_name" placeholder="Enter Customer Name" required>
+            <input type="submit" value="Return Book">
+        </form>
+    </div>
+
+    <!-- Add Fine Form -->
+    <div id="AddFine" class="form-section">
+        <h3>Add Fine</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="add_fine">
+            <input type="text" name="customer_name" placeholder="Customer Name">
+            <input type="number" name="amount" step="0.01" placeholder="Fine Amount">
+            <input type="submit" value="Add Fine">
+        </form>
+    </div>
+
+    <!-- Pay Fine Form -->
+    <div id="PayFine" class="form-section">
+        <h3>Pay Fine</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="pay_fine">
+            <input type="text" name="customer_name" placeholder="Customer Name">
+            <input type="number" step="0.01" name="amount" placeholder="Amount Paid" required>
+            <input type="submit" value="Pay Fine">
+        </form>
+    </div>
+
+    <!-- Search Customer Form -->
+    <div id="SearchCustomer" class="form-section">
+        <h3>Search Customer</h3>
+        <form method="POST" action="/librarian_operations">
+            <input type="hidden" name="action_type" value="search_customer">
+            <input type="text" name="name" placeholder="Customer Name">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+        {% if customer %}
+    <div class="search-result" style="border: 1px solid #4CAF50; padding: 10px; margin-top: 10px; border-radius: 10px;">
+        <h3>Customer Search Result:</h3>
+        <p><strong>ID:</strong> {{ customer.id }}</p>
+        <p><strong>Name:</strong> {{ customer.name }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Phone:</strong> {{ customer.phone }}</p>
+        <p><strong>Total Fine:</strong> ₹{{ customer.total_fine }}</p>
+    </div>
+    {% endif %}
+
+
+    <!-- JS to toggle forms -->
+    <script>
+        function toggleSection(sectionId) {
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach(section => section.style.display = 'none');
+            const selected = document.getElementById(sectionId);
+            if (selected) selected.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

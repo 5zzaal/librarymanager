@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles4.css') }}">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Library Management System</h1>
+    </header>
+    <hr>
+    <br><br>
+    <h2><b>SEARCH BOOK</b></h2>
+
+<!-- Search Book Form -->
+<div id="searchbar" class="search_bar">
+    <form method="POST" action="/customer">
+        <input type="text" name="search_term" placeholder="  Search by Book ID or Title..." required>
+        <button type="submit">🔎</button>
+    </form>
+</div>
+{% if books %}
+    <div class="search-result">
+        <h3>Search Results:</h3>
+        <ul>
+            {% for book in books %}
+                <li>
+                    <strong>Title:</strong> {{ book.title }}<br>
+                    <strong>Author:</strong> {{ book.author }}<br>
+                    <strong>Category:</strong> {{ book.category }}<br>
+                    <strong>Available Copies:</strong> {{ book.available_copies }}
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+
+    
